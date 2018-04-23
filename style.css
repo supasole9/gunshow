@@ -1,0 +1,99 @@
+.spinner {
+  width: 100px;
+  height: 100px;
+
+  position: relative;
+  margin: 100px auto;
+}
+
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bounce {
+  0%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+
+#app{
+  width: 100%;
+}
+
+.container img{
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+}
+
+.container{
+  width: 30%;
+  margin: 0 auto;
+}
+
+.container input{
+  width: 100%;
+  height: 65px;
+  font-size: 2rem;
+  border: 0;
+  margin-bottom: 15px;
+}
+
+.container button{
+  width: 100%;
+  height: 65px;
+  font-size: 2.5rem;
+  border: 0;
+  padding: 5px;
+  background-color: red
+}
+
+.playing{
+  width: 80%;
+  margin: 250px auto 0;
+}
+
+.flex{
+  display: flex;
+  justify-content: space-around;
+}
+
+.section{
+  width: 400px;
+}
+
+.play-buttons{
+  margin: 0 auto 15px;
+  width: 90%;
+  height: 75px;
+  color: black;
+  background-color: beige;
+}
+
+button:disabled{
+  background-color: green;
+}
