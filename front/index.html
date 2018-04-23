@@ -27,7 +27,7 @@
       <div class="flex">
         <div class="section">
           <div v-for="n in playerAmmo">
-            bullet
+            <img src="./images/ammo.png" alt="bullet">
           </div>
           <button class="play-buttons" v-on:click="shoot" :disabled="!playerAmmo">shoot</button>
           <button class="play-buttons" v-on:click="block">block</button>
