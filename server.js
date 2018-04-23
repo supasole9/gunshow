@@ -1,10 +1,10 @@
 const express = require('express');
-const WebSocket = require('ws');
 
 const app = express();
 app.use(express.static("front"));
-var server = app.listen(process.env.PORT || 8080)
-const wss = new WebSocket.Server({ 'server': server });
+var server = app.listen(process.env.PORT || 8080, function () {
+  console.log("server started");
+});
 
 const playerList = [];
 const gameList = [];
@@ -33,6 +33,9 @@ function game(player1, player2) {
   this.player2move = "";
   this.gameID = gameid();
 };
+
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ 'server': server });
 
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
