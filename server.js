@@ -1,12 +1,10 @@
-const WebSocket = require('ws');
 const express = require('express');
-const http = require('http');
+const WebSocket = require('ws');
 
 const app = express();
 app.use(express.static("front"));
-const port = process.env.PORT || 8080;
-const httpServer = http.createServer(app)
-const wss = new WebSocket.Server({ 'server': httpServer });
+var server = app.listen(process.env.PORT || 8080)
+const wss = new WebSocket.Server({ 'server': server });
 
 const playerList = [];
 const gameList = [];
@@ -162,5 +160,3 @@ var check = function () {
 };
 
 check();
-
-httpServer.listen(port)
