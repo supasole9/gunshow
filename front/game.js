@@ -33,7 +33,7 @@ const app = new Vue ({
     }
   },
   created: function () {
-    this.socket = new WebSocket('ws://localhost:8080');
+    this.socket = new WebSocket('ws://frozen-shelf-22342.herokuapp.com');
     this.socket.onopen = function () {
         console.log("connecte3d to server...");
     };
