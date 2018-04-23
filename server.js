@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 
 const app = express();
+app.use(express.static("front"));
 const port = process.env.PORT || 8080;
 const httpServer = http.createServer(app)
 const wss = new WebSocket.Server({ 'server': httpServer });
