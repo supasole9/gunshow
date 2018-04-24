@@ -98,6 +98,7 @@ var logMessage = function (message) {
     app.loser = data.loser;
     app.opponentMove = data.opponentMove;
   } else if (data.action == "play") {
+    app.yourmove = data.yourmove;
     app.shootActive = false;
     app.reloadActive = false;
     app.blockActive = false;
