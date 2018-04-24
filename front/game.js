@@ -93,10 +93,10 @@ var logMessage = function (message) {
     app.gameID = data.gameID;
     app.opponentName = data.opponentName;
   } else if (data.action == "result") {
+    app.opponentMove = data.opponentMove;
     app.gameEnd = data.gameEnd;
     app.winner = data.winner;
     app.loser = data.loser;
-    app.opponentMove = data.opponentMove;
   } else if (data.action == "play") {
     app.yourmove = data.yourmove;
     app.shootActive = false;
