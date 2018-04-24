@@ -1,3 +1,7 @@
+*,*::after, *::before{
+  box-sizing:border-box;
+}
+
 .spinner {
   width: 100px;
   height: 100px;
@@ -95,5 +99,31 @@
 }
 
 button:disabled{
-  background-color: green;
+  background-color: grey;
+}
+
+.display-flex{
+  display: flex;
+  flex-direction: row;
+}
+
+#ammo-belt{
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+  height: 250px;
+}
+
+#empty-ammo{
+  margin-top: 75px;
+}
+
+#ammo{
+  height: 200px;
+  display: inline-flex;
+}
+
+#ammo>div{
+  height: 100%;
+  width: auto;
 }

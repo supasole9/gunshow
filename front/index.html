@@ -26,9 +26,6 @@
     <div class="playing" v-if="playing">
       <div class="flex">
         <div class="section">
-          <div v-for="n in playerAmmo">
-            <img src="./images/ammo.png" alt="bullet">
-          </div>
           <button class="play-buttons" v-on:click="shoot" :disabled="!playerAmmo">shoot</button>
           <button class="play-buttons" v-on:click="block">block</button>
           <button class="play-buttons" v-on:click="reload">reload</button>
@@ -36,10 +33,22 @@
         <div class="section">
           <div> You chose: {{yourmove}} </div>
           <div> {{opponentName}} chose: {{opponentMove}} </div>
+          <div id="ammo-belt">
+            <div id="ammo">
+              <div class="display-flex" v-for="n in playerAmmo">
+                <img src="./images/ammo.png" alt="bullet" style="height: 100%; width:auto; margin-right: 15px">
+              </div>
+              <div id="empty-ammo" v-if="!playerAmmo">
+                You are unable to shoot!
+              </div>
+            </div>
+            <p>Ammo Belt</p>
+          </div>
         </div>
       </div>
       <div v-if="winner"><h1>You Win!</h1></div>
       <div v-if="loser"><h1>You Lose!</h1></div>
+      <div v-if="gameEnd"><button v-on:click="sendNewGame">Play Again?</button></div>
     </div>
   </div>
   <script src="vue.js"></script>

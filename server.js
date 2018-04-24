@@ -6,10 +6,13 @@ var server = app.listen(process.env.PORT || 8080, function () {
   console.log("server started");
 });
 
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ 'server': server });
+
 const playerList = [];
 const gameList = [];
 
-function player (data, ws) {
+function Player (data, ws) {
   this.name = data.name,
   this.playing = false,
   this.ws = ws,
@@ -25,7 +28,7 @@ var gameid = function () {
   return string
 }
 
-function game(player1, player2) {
+function Game(player1, player2) {
   this.gameEnd = false,
   this.player1 = player1,
   this.player2 = player2,
@@ -33,9 +36,6 @@ function game(player1, player2) {
   this.player2move = "";
   this.gameID = gameid();
 };
-
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ 'server': server });
 
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
@@ -49,12 +49,21 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(data) {
     var json = JSON.parse(data);
     if (json.action == "newUser") {
-      var p = new player(json, ws);
+      var p = new Player(json, ws);
       confirmSignIn(json, ws);
       gamefind(p);
       playerList.push(p);
     } else if (json.action == "action") {
       compareActions(ws, json.move, json.gameId)
+    } else if (json.action == "newGame") {
+      for (var nuts in playerList) {
+        if (ws == playerList[nuts].ws) {
+          playerList[nuts].playing = false;
+          gamefind(playerList[nuts])
+        } else {
+          console.log("player not in playerlist")
+        }
+      }
     } else {
       console.log(json);
     }
@@ -70,10 +79,10 @@ var confirmSignIn = function (playerData, websocket) {
 var gamefind = function (person) {
   for (var aa in playerList) {
     var pp = playerList[aa];
-    if (pp.playing == false) {
+    if (pp.playing == false && person.ws != pp.ws) {
       person.playing = true;
       pp.playing = true;
-      var newGame = new game(pp, person);
+      var newGame = new Game(pp, person);
       gameList.push(newGame);
       newGame.player1.ws.send(JSON.stringify( {action: "newGame", gameID: newGame.gameID, playerAmmo: 0, opponentName: person.name} ));
       newGame.player2.ws.send(JSON.stringify( {action: "newGame", gameID: newGame.gameID, playerAmmo: 0, opponentName: pp.name} ));
@@ -92,8 +101,8 @@ var compareActions = function (ws, move, gameId) {
 
       while (gameList[game].player1move && gameList[game].player2move) {
         if (gameList[game].player1move == "shoot" && gameList[game].player2move == "shoot") {
-          gameList[game].player1.ws.send(JSON.stringify( {action: "result", gameEnd: true, draw: true} ));
-          gameList[game].player2.ws.send(JSON.stringify( {action: "result", gameEnd: true, draw: true} ));
+          gameList[game].player1.ws.send(JSON.stringify( {action: "result", gameEnd: true, draw: true, opponentMove:gameList[game].player2move} ));
+          gameList[game].player2.ws.send(JSON.stringify( {action: "result", gameEnd: true, draw: true, opponentMove:gameList[game].player1move} ));
           gameList[game].player1move = "";
           gameList[game].player2move = "";
           gameList[game].gameEnd = true;
@@ -105,8 +114,8 @@ var compareActions = function (ws, move, gameId) {
           gameList[game].player2move = "";
           return
         } else if (gameList[game].player1move == "shoot" && gameList[game].player2move == "reload") {
-          gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true} ));
-          gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true} ));
+          gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true, opponentMove:gameList[game].player2move} ));
+          gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true,opponentMove:gameList[game].player1move} ));
           gameList[game].gameEnd = true;
           return
         } else if (gameList[game].player2move == "shoot" && gameList[game].player1move == "block") {
@@ -116,8 +125,8 @@ var compareActions = function (ws, move, gameId) {
           gameList[game].player2move = "";
           return
         } else if (gameList[game].player2move == "shoot" && gameList[game].player1move == "reload") {
-          gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true } ));
-          gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true } ));
+          gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true , opponentMove:gameList[game].player2move} ));
+          gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true, opponentMove:gameList[game].player1move } ));
           gameList[game].gameEnd = true;
           return
         } else if (gameList[game].player2move == "reload" && gameList[game].player1move == "reload") {
@@ -152,14 +161,13 @@ var compareActions = function (ws, move, gameId) {
 
 var check = function () {
   setInterval(function () {
-    console.log(playerList)
     for (var i = 0; i < playerList.length; i++) {
       if (playerList[i].ws.readyState === WebSocket.CLOSED) {
         playerList.splice(playerList[i],1)
         console.log("removed")
       }
     }
-  }, 3000);
+  }, 1000);
 };
 
 check();

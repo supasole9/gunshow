@@ -30,6 +30,11 @@ const app = new Vue ({
     },
     sendUsername: function () {
       this.socket.send(JSON.stringify({action: "newUser", name: this.Username}));
+    },
+    sendNewGame: function () {
+      this.playing = false;
+      this.waiting = true;
+      this.socket.send(JSON.stringify({action: "newGame"}));
     }
   },
   created: function () {
@@ -53,15 +58,22 @@ var logMessage = function (message) {
     app.signup = false;
     app.waiting = true;
   } else if (data.action == "newGame") {
+    app.winner = false;
+    app.loser = false;
+    app.gameEnd = false;
+    app.playerAmmo = 0;
+    app.opponentMove = "";
+    app.yourmove = "";
     app.waiting = false;
     app.playing = true;
     app.playerAmmo = data.playerAmmo;
     app.gameID = data.gameID;
     app.opponentName = data.opponentName;
   } else if (data.action == "result") {
-    app.gameEnd = data.gamePlay;
+    app.gameEnd = data.gameEnd;
     app.winner = data.winner;
     app.loser = data.loser;
+    app.opponentMove = data.opponentMove;
   } else if (data.action == "play") {
     if (data.predicate == "reload") {
       app.playerAmmo += data.playerAmmo;
