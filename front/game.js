@@ -85,6 +85,7 @@ var logMessage = function (message) {
     app.loser = false;
     app.gameEnd = false;
     app.playerAmmo = 0;
+    app.playerwaiting = false;
     app.gameshield = data.gameshield;
     app.opponentMove = "";
     app.yourmove = "";
