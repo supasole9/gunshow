@@ -2,56 +2,29 @@
   box-sizing:border-box;
 }
 
-.spinner {
-  width: 100px;
-  height: 100px;
-
-  position: relative;
-  margin: 100px auto;
+h1{
+  font-family: 'Fruktur', cursive;
+  font-size: 2.3rem;
+  text-align: center;
+  color: #540032;
 }
 
-.double-bounce1, .double-bounce2 {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-color: #333;
-  opacity: 0.6;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
-  animation: sk-bounce 2.0s infinite ease-in-out;
+h2{
+  text-align: center;
+  font-family: 'Fruktur', cursive;
 }
 
-.double-bounce2 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+p{
+  font-family: 'Oswald', sans-serif;
 }
 
-@-webkit-keyframes sk-bounce {
-  0%, 100% { -webkit-transform: scale(0.0) }
-  50% { -webkit-transform: scale(1.0) }
-}
-
-@keyframes sk-bounce {
-  0%, 100% {
-    transform: scale(0.0);
-    -webkit-transform: scale(0.0);
-  } 50% {
-    transform: scale(1.0);
-    -webkit-transform: scale(1.0);
-  }
+.titles{
+  font-family: 'Fruktur', cursive;
+  font-size: 1.7rem;
 }
 
 #app{
   width: 100%;
-}
-
-.container img{
-  margin: 0 auto;
-  width: 100%;
-  height: auto;
 }
 
 .container{
@@ -59,7 +32,17 @@
   margin: 0 auto;
 }
 
-.container input{
+.display-block{
+  width: 100%;
+}
+
+.display-block img{
+  width: 100%;
+  height: auto;
+}
+
+
+.display-block input{
   width: 100%;
   height: 65px;
   font-size: 2rem;
@@ -67,13 +50,15 @@
   margin-bottom: 15px;
 }
 
-.container button{
-  width: 100%;
+.display-block button, .container button{
+  width: 80%;
+  margin-left: 10% ;
   height: 65px;
-  font-size: 2.5rem;
+  font-size: 1.9rem;
   border: 0;
   padding: 5px;
-  background-color: red
+  background-color: #F04667;
+  font-family: 'Fruktur', cursive;
 }
 
 .playing{
@@ -91,11 +76,13 @@
 }
 
 .play-buttons{
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
   margin: 0 auto 15px;
   width: 90%;
   height: 75px;
   color: black;
-  background-color: beige;
+  background-color: #FAC5AF;
 }
 
 button:disabled{
@@ -131,7 +118,7 @@ button:disabled{
 #shield-belt{
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
+  margin-top: 35px;
   height: 100px;
 }
 
@@ -143,4 +130,8 @@ button:disabled{
 #shield>div{
   height: 100%;
   width: auto;
+}
+
+.highlight{
+  color: #F0433A;
 }

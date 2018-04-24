@@ -4,24 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Fruktur" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <title>The Gun Show</title>
 </head>
 <body>
   <div id="app">
     <div class="container" v-if="signup">
-      <div>
+      <div class="display-block">
         <img src="./images/guns.png" alt="title">
         <input type="text" v-model="Username" placeholder="Enter username">
-        <button v-on:click="sendUsername">Send</button>
+        <button v-on:click="sendUsername">PLAY</button>
       </div>
     </div>
     <div class="container" v-if="waiting">
-      <h1>Finding you an opponent..</h1>
       <h1>How to play?</h1>
-      <p>The objective of the game is to shoot the other player. In order to shoot, you need bullets(ammo). You get ammo by reloading.</p>
-      <p>You can deflect bullets by using a shield(block). However, if your can only block 5 bullets before rendering yourself .</p>
-      <button v-on:click="confirmGameEntry" :disabled="!confirmGame">Confirm</button>
+      <p>The objective of the game is to <span class="highlight">shoot the other player</span>.</p>
+      <p>In order to shoot, you need bullets(ammo).</p> <p>You get ammo by reloading.</p>
+      <p>You can deflect bullets by using a shield(block).</p>
+      <p> However, you can only block 5 bullets before rendering yourself defenseless.</p>
+      <p>If you are shot while reloading, you will die instantly.</p>
+      <p>Ammo <img src="./images/ammo.png" alt="bullet" style="height: 50px; width:auto; margin-right: 50px">
+      Shield <img src="./images/shield.png" alt="shield" style="height: 50px; width:auto"></p>
+      <button v-on:click="confirmGameEntry" :disabled="!confirmGame">Duel!</button>
+      <h2 v-if="!confirmGame">Finding you an opponent..</h2>
     </div>
     <div class="playing" v-if="playing">
       <div class="flex">
@@ -42,7 +49,7 @@
                 You are unable to shoot!
               </div>
             </div>
-            <p>Ammo Belt</p>
+            <span class="titles">Ammo Loaded</span>
           </div>
           <div id="shield-belt">
             <div id="shield">
@@ -53,7 +60,7 @@
                 You are unable to block!
               </div>
             </div>
-            <p>Deflecting Shield</p>
+            <span class="titles">Shield Life</span>
           </div>
         </div>
       </div>

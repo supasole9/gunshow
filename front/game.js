@@ -45,11 +45,11 @@ const app = new Vue ({
     }
   },
   created: function () {
-    var HOST = location.origin.replace(/^http/, 'ws');
-    this.socket = new WebSocket(HOST);
+    // var HOST = location.origin.replace(/^http/, 'ws');
+    this.socket = new WebSocket("ws://localhost:8080");
 
     this.socket.onopen = function () {
-        console.log("connecte3d to server...");
+        console.log("Were Ready");
     };
     this.socket.onmessage = function (event) {
         console.log("Message Recived", event)
