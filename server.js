@@ -97,8 +97,10 @@ var compareActions = function (ws, move, gameId) {
     if (gameList[game].gameID == gameId) {
       if (gameList[game].player1.ws == ws) {
         gameList[game].player1move = move;
+        gameList[game].player2.ws.send(JSON.stringify({action: "playerwaiting"}));
       } else {
         gameList[game].player2move = move;
+        gameList[game].player1.ws.send(JSON.stringify({action: "playerwaiting"}));
       }
 
       while (gameList[game].player1move && gameList[game].player2move) {

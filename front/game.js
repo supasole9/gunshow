@@ -15,7 +15,8 @@ const app = new Vue ({
     opponentMove: "",
     yourmove: "",
     confirmGame: false,
-    gameshield: 0
+    gameshield: 0,
+    playerwaiting: false
   },
   methods: {
     shoot: function () {
@@ -45,8 +46,8 @@ const app = new Vue ({
     }
   },
   created: function () {
-    // var HOST = location.origin.replace(/^http/, 'ws');
-    this.socket = new WebSocket("ws://localhost:8080");
+    var HOST = location.origin.replace(/^http/, 'ws');
+    this.socket = new WebSocket(HOST);
 
     this.socket.onopen = function () {
         console.log("Were Ready");
@@ -82,6 +83,7 @@ var logMessage = function (message) {
     app.loser = data.loser;
     app.opponentMove = data.opponentMove;
   } else if (data.action == "play") {
+    app.playerwaiting = false;
     if (data.predicate == "reload") {
       app.playerAmmo += data.playerAmmo;
       app.opponentMove = data.opponentMove;
@@ -92,5 +94,7 @@ var logMessage = function (message) {
       app.gameshield -= data.gameshield;
       app.opponentMove = data.opponentMove;
     }
+  } else if (data.action = "playerwaiting") {
+    app.playerwaiting = true;
   }
 };

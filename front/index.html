@@ -39,7 +39,7 @@
         </div>
         <div class="section">
           <div> You chose: {{yourmove}} </div>
-          <div> {{opponentName}} chose: <h2>{{opponentMove}}</h2> </div>
+          <div> {{opponentName}} chose: <p v-if="playerwaiting"> Player is waiting</p> <p v-else>{{ opponentMove }}</p> </div>
           <div id="ammo-belt">
             <div id="ammo">
               <div class="display-flex" v-for="n in playerAmmo">
