@@ -21,7 +21,7 @@
     <div class="container" v-if="waiting">
       <h1>How to play?</h1>
       <p>The objective of the game is to <span class="highlight">shoot the other player</span>.</p>
-      <p>In order to shoot, you need bullets(ammo).</p> <p>You get ammo by reloading.</p>
+      <p>In order to shoot, you need bullets(ammo).</p> <p>You get ammo by reloading.</p> <p>Each reload gives you one (1) bullet.</p>
       <p>You can deflect bullets by using a shield(block).</p>
       <p> However, you can only block 5 bullets before rendering yourself defenseless.</p>
       <p>If you are shot while reloading, you will die instantly.</p>
@@ -31,6 +31,13 @@
       <h2 v-if="!confirmGame">Finding you an opponent..</h2>
     </div>
     <div class="playing" v-if="playing">
+      <div class="modal" v-if="gameEnd">
+        <div class="content">
+          <div v-if="winner"><h1>You Win!</h1></div>
+          <div v-if="loser"><h1>You Lose!</h1></div>
+          <div v-if="gameEnd"><button class="playagain" v-on:click="sendNewGame">Play Again?</button></div>
+        </div>
+      </div>
       <div class="flex">
         <div class="section">
           <button class="play-buttons" v-bind:class="{ active: shootActive }" v-on:click="shoot" :disabled="!playerAmmo">shoot</button>
@@ -38,9 +45,10 @@
           <button class="play-buttons" v-bind:class="{ active: reloadActive }" v-on:click="reload">reload</button>
         </div>
         <div class="section">
-          <div> You chose: {{yourmove}} </div>
-          <div> {{opponentName}} chose: <span class="waiting" v-if="playerwaiting">Ready</span> <span v-else>{{ opponentMove }}</span> </div>
+          <div class="biggertext"> You chose: {{yourmove}} </div>
+          <div class="biggertext"> {{opponentName}} chose: <span class="waiting" v-if="playerwaiting">Ready</span> <span v-else>{{ opponentMove }}</span> </div>
           <div id="ammo-belt">
+            <span class="titles">Ammo Loaded</span>
             <div id="ammo">
               <div class="display-flex" v-for="n in playerAmmo">
                 <img src="./images/ammo.png" alt="bullet" style="height: 100%; width:auto; margin-right: 15px">
@@ -49,9 +57,9 @@
                 You are unable to shoot!
               </div>
             </div>
-            <span class="titles">Ammo Loaded</span>
           </div>
           <div id="shield-belt">
+            <span class="titles">Shield Life</span>
             <div id="shield">
               <div class="display-flex" v-for="n in gameshield">
                 <img src="./images/shield.png" alt="bullet" style="height: 100%; width:auto">
@@ -60,13 +68,9 @@
                 You are unable to block!
               </div>
             </div>
-            <span class="titles">Shield Life</span>
           </div>
         </div>
       </div>
-      <div v-if="winner"><h1>You Win!</h1></div>
-      <div v-if="loser"><h1>You Lose!</h1></div>
-      <div v-if="gameEnd"><button v-on:click="sendNewGame">Play Again?</button></div>
     </div>
   </div>
   <script src="vue.js"></script>
