@@ -15,7 +15,9 @@
       <div class="display-block">
         <img src="./images/guns.png" alt="title">
         <input type="text" v-model="Username" placeholder="Enter username">
-        <button v-on:click="sendUsername">PLAY</button>
+        <div class="center">
+          <button v-on:click="sendUsername">PLAY</button>
+        </div>
       </div>
     </div>
     <div class="container" v-if="waiting">
@@ -27,7 +29,9 @@
       <p>If you are shot while reloading, you will die instantly.</p>
       <p>Ammo <img src="./images/ammo.png" alt="bullet" style="height: 50px; width:auto; margin-right: 50px">
       Shield <img src="./images/shield.png" alt="shield" style="height: 50px; width:auto"></p>
-      <button v-on:click="confirmGameEntry" :disabled="!confirmGame">Duel!</button>
+      <div class="center">
+        <button v-on:click="confirmGameEntry" :disabled="!confirmGame">Duel!</button>
+      </div>
       <h2 v-if="!confirmGame">Finding you an opponent..</h2>
     </div>
     <div class="playing" v-if="playing">
