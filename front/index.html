@@ -18,10 +18,10 @@
     </div>
     <div class="container" v-if="waiting">
       <h1>Finding you an opponent..</h1>
-      <div class="spinner">
-        <div class="double-bounce1"></div>
-        <div class="double-bounce2"></div>
-      </div>
+      <h1>How to play?</h1>
+      <p>The objective of the game is to shoot the other player. In order to shoot, you need bullets(ammo). You get ammo by reloading.</p>
+      <p>You can deflect bullets by using a shield(block). However, if your can only block 5 bullets before rendering yourself .</p>
+      <button v-on:click="confirmGameEntry" :disabled="!confirmGame">Confirm</button>
     </div>
     <div class="playing" v-if="playing">
       <div class="flex">
@@ -32,7 +32,7 @@
         </div>
         <div class="section">
           <div> You chose: {{yourmove}} </div>
-          <div> {{opponentName}} chose: {{opponentMove}} </div>
+          <div> {{opponentName}} chose: <h2>{{opponentMove}}</h2> </div>
           <div id="ammo-belt">
             <div id="ammo">
               <div class="display-flex" v-for="n in playerAmmo">
@@ -43,6 +43,17 @@
               </div>
             </div>
             <p>Ammo Belt</p>
+          </div>
+          <div id="shield-belt">
+            <div id="shield">
+              <div class="display-flex" v-for="n in gameshield">
+                <img src="./images/shield.png" alt="bullet" style="height: 100%; width:auto">
+              </div>
+              <div id="empty-shield" v-if="!gameshield">
+                You are unable to block!
+              </div>
+            </div>
+            <p>Deflecting Shield</p>
           </div>
         </div>
       </div>

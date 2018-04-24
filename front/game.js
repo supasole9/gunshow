@@ -14,6 +14,8 @@ const app = new Vue ({
     opponentName: "",
     opponentMove: "",
     yourmove: "",
+    confirmGame: false,
+    gameshield: 0
   },
   methods: {
     shoot: function () {
@@ -34,12 +36,17 @@ const app = new Vue ({
     sendNewGame: function () {
       this.playing = false;
       this.waiting = true;
+      this.confirmGame = false;
       this.socket.send(JSON.stringify({action: "newGame"}));
+    },
+    confirmGameEntry: function () {
+      this.waiting = false;
+      this.playing = true;
     }
   },
   created: function () {
-    var HOST = location.origin.replace(/^http/, 'ws');
-    this.socket = new WebSocket(HOST);
+    // var HOST = location.origin.replace(/^http/, 'ws');
+    this.socket = new WebSocket("ws://localhost:8080");
 
     this.socket.onopen = function () {
         console.log("connecte3d to server...");
@@ -62,10 +69,10 @@ var logMessage = function (message) {
     app.loser = false;
     app.gameEnd = false;
     app.playerAmmo = 0;
+    app.gameshield = data.gameshield;
     app.opponentMove = "";
     app.yourmove = "";
-    app.waiting = false;
-    app.playing = true;
+    app.confirmGame = true;
     app.playerAmmo = data.playerAmmo;
     app.gameID = data.gameID;
     app.opponentName = data.opponentName;
@@ -82,6 +89,7 @@ var logMessage = function (message) {
       app.playerAmmo -= data.playerAmmo;
       app.opponentMove = data.opponentMove;
     } else if (data.predicate == "block") {
+      app.gameshield -= data.gameshield;
       app.opponentMove = data.opponentMove;
     }
   }

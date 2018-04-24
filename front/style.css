@@ -110,20 +110,37 @@ button:disabled{
 #ammo-belt{
   display: flex;
   flex-direction: column;
-  margin-top: 25px;
-  height: 250px;
+  margin-top: 15px;
+  height: 125px;
 }
 
 #empty-ammo{
-  margin-top: 75px;
+  margin-top: 45px;
 }
 
 #ammo{
-  height: 200px;
+  height: 100px;
   display: inline-flex;
 }
 
 #ammo>div{
+  height: 100%;
+  width: auto;
+}
+
+#shield-belt{
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  height: 100px;
+}
+
+#shield{
+  height: 50px;
+  display: inline-flex;
+}
+
+#shield>div{
   height: 100%;
   width: auto;
 }

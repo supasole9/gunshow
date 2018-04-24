@@ -34,6 +34,8 @@ function Game(player1, player2) {
   this.player2 = player2,
   this.player1move = "";
   this.player2move = "";
+  this.player1shield = 5;
+  this.player2shield = 5;
   this.gameID = gameid();
 };
 
@@ -84,8 +86,8 @@ var gamefind = function (person) {
       pp.playing = true;
       var newGame = new Game(pp, person);
       gameList.push(newGame);
-      newGame.player1.ws.send(JSON.stringify( {action: "newGame", gameID: newGame.gameID, playerAmmo: 0, opponentName: person.name} ));
-      newGame.player2.ws.send(JSON.stringify( {action: "newGame", gameID: newGame.gameID, playerAmmo: 0, opponentName: pp.name} ));
+      newGame.player1.ws.send(JSON.stringify( {action: "newGame", gameID: newGame.gameID, playerAmmo: 0, opponentName: person.name, gameshield: newGame.player1shield} ));
+      newGame.player2.ws.send(JSON.stringify( {action: "newGame", gameID: newGame.gameID, playerAmmo: 0, opponentName: pp.name, gameshield: newGame.player2shield} ));
     }
   } return
 };
@@ -108,22 +110,38 @@ var compareActions = function (ws, move, gameId) {
           gameList[game].gameEnd = true;
           return
         } else if (gameList[game].player1move == "shoot" && gameList[game].player2move == "block") {
-          gameList[game].player1.ws.send(JSON.stringify( {predicate: "shoot", opponentMove:gameList[game].player2move, action: "play", playerAmmo: 1} ));
-          gameList[game].player2.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player1move, action: "play"} ));
-          gameList[game].player1move = "";
-          gameList[game].player2move = "";
-          return
+          gameList[game].player2shield -= 1;
+          console.log(gameList[game].player2shield);
+          if (gameList[game].player2shield == -1) {
+            gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true, opponentMove:gameList[game].player2move} ));
+            gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true,opponentMove:gameList[game].player1move} ));
+            return
+          } else {
+            gameList[game].player1.ws.send(JSON.stringify( {predicate: "shoot", opponentMove:gameList[game].player2move, action: "play", playerAmmo: 1} ));
+            gameList[game].player2.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player1move, action: "play", gameshield: 1} ));
+            gameList[game].player1move = "";
+            gameList[game].player2move = "";
+            return
+          }
         } else if (gameList[game].player1move == "shoot" && gameList[game].player2move == "reload") {
           gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true, opponentMove:gameList[game].player2move} ));
           gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true,opponentMove:gameList[game].player1move} ));
           gameList[game].gameEnd = true;
           return
         } else if (gameList[game].player2move == "shoot" && gameList[game].player1move == "block") {
-          gameList[game].player1.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player2move, action: "play"} ));
-          gameList[game].player2.ws.send(JSON.stringify( {predicate: "shoot", opponentMove:gameList[game].player1move, action: "play", playerAmmo: 1} ));
-          gameList[game].player1move = "";
-          gameList[game].player2move = "";
-          return
+          gameList[game].player1shield -= 1;
+          console.log(gameList[game].player1shield);
+          if (gameList[game].player1shield == -1) {
+            gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true, opponentMove:gameList[game].player1move} ));
+            gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true,opponentMove:gameList[game].player2move} ));
+            return
+          } else {
+            gameList[game].player1.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player2move, action: "play", gameshield: 1} ));
+            gameList[game].player2.ws.send(JSON.stringify( {predicate: "shoot", opponentMove:gameList[game].player1move, action: "play", playerAmmo: 1} ));
+            gameList[game].player1move = "";
+            gameList[game].player2move = "";
+            return
+          }
         } else if (gameList[game].player2move == "shoot" && gameList[game].player1move == "reload") {
           gameList[game].player1.ws.send(JSON.stringify( { action: "result", gameEnd: true, loser: true , opponentMove:gameList[game].player2move} ));
           gameList[game].player2.ws.send(JSON.stringify( { action: "result", gameEnd: true, winner: true, opponentMove:gameList[game].player1move } ));
@@ -136,20 +154,20 @@ var compareActions = function (ws, move, gameId) {
           gameList[game].player2move = "";
           return
         } else if (gameList[game].player2move == "block" && gameList[game].player1move == "block") {
-          gameList[game].player1.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player2move, action: "play"} ));
-          gameList[game].player2.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player1move, action: "play"} ));
+          gameList[game].player1.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player2move, action: "play", gameshield: 0} ));
+          gameList[game].player2.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player1move, action: "play", gameshield: 0} ));
           gameList[game].player1move = "";
           gameList[game].player2move = "";
           return
         } else if (gameList[game].player2move == "reload" && gameList[game].player1move == "block") {
-          gameList[game].player1.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player2move, action: "play"} ));
+          gameList[game].player1.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player2move, action: "play", gameshield: 0} ));
           gameList[game].player2.ws.send(JSON.stringify( {predicate: "reload", opponentMove:gameList[game].player1move, action: "play", playerAmmo: 1} ));
           gameList[game].player1move = "";
           gameList[game].player2move = "";
           return
         } else if (gameList[game].player1move == "reload" && gameList[game].player2move == "block") {
           gameList[game].player1.ws.send(JSON.stringify( {predicate: "reload", opponentMove:gameList[game].player2move, action: "play", playerAmmo: 1} ));
-          gameList[game].player2.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player1move, action: "play"} ));
+          gameList[game].player2.ws.send(JSON.stringify( {predicate: "block", opponentMove:gameList[game].player1move, action: "play", gameshield: 0} ));
           gameList[game].player1move = "";
           gameList[game].player2move = "";
           return
