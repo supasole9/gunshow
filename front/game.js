@@ -16,19 +16,34 @@ const app = new Vue ({
     yourmove: "",
     confirmGame: false,
     gameshield: 0,
-    playerwaiting: false
+    playerwaiting: false,
+    reloadActive: false,
+    shootActive: false,
+    blockActive: false
   },
   methods: {
     shoot: function () {
+      this.opponentMove = "",
       this.yourmove = "shoot";
+      this.shootActive = true;
+      this.reloadActive = false;
+      this.blockActive = false;
       this.socket.send(JSON.stringify( {action: "action", move: "shoot", gameId: this.gameID} ));
     },
     block: function () {
+      this.opponentMove = "",
       this.yourmove = "block";
+      this.shootActive = false;
+      this.reloadActive = false;
+      this.blockActive = true;
       this.socket.send(JSON.stringify( {action: "action", move: "block", gameId: this.gameID} ));
     },
     reload: function () {
+      this.opponentMove = "",
       this.yourmove = "reload";
+      this.shootActive = false;
+      this.blockActive = false;
+      this.reloadActive = true;
       this.socket.send(JSON.stringify( {action: "action", move: "reload", gameId: this.gameID} ));
     },
     sendUsername: function () {
@@ -83,6 +98,9 @@ var logMessage = function (message) {
     app.loser = data.loser;
     app.opponentMove = data.opponentMove;
   } else if (data.action == "play") {
+    app.shootActive = false;
+    app.reloadActive = false;
+    app.blockActive = false;
     app.playerwaiting = false;
     if (data.predicate == "reload") {
       app.playerAmmo += data.playerAmmo;
@@ -95,6 +113,7 @@ var logMessage = function (message) {
       app.opponentMove = data.opponentMove;
     }
   } else if (data.action = "playerwaiting") {
+    app.yourmove = "";
     app.playerwaiting = true;
   }
 };

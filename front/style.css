@@ -14,7 +14,7 @@ h2{
   font-family: 'Fruktur', cursive;
 }
 
-p{
+p, body{
   font-family: 'Oswald', sans-serif;
 }
 
@@ -134,4 +134,13 @@ button:disabled{
 
 .highlight{
   color: #F0433A;
+}
+
+.waiting{
+  color: #03820B;
+  font-size: 1.5rem;
+}
+
+.active{
+  background-color: orange;
 }

@@ -33,13 +33,13 @@
     <div class="playing" v-if="playing">
       <div class="flex">
         <div class="section">
-          <button class="play-buttons" v-on:click="shoot" :disabled="!playerAmmo">shoot</button>
-          <button class="play-buttons" v-on:click="block">block</button>
-          <button class="play-buttons" v-on:click="reload">reload</button>
+          <button class="play-buttons" v-bind:class="{ active: shootActive }" v-on:click="shoot" :disabled="!playerAmmo">shoot</button>
+          <button class="play-buttons" v-bind:class="{ active: blockActive }" v-on:click="block">block</button>
+          <button class="play-buttons" v-bind:class="{ active: reloadActive }" v-on:click="reload">reload</button>
         </div>
         <div class="section">
           <div> You chose: {{yourmove}} </div>
-          <div> {{opponentName}} chose: <p v-if="playerwaiting"> Player is waiting</p> <p v-else>{{ opponentMove }}</p> </div>
+          <div> {{opponentName}} chose: <span class="waiting" v-if="playerwaiting">Ready</span> <span v-else>{{ opponentMove }}</span> </div>
           <div id="ammo-belt">
             <div id="ammo">
               <div class="display-flex" v-for="n in playerAmmo">
