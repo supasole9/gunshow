@@ -45,8 +45,8 @@ const app = new Vue ({
     }
   },
   created: function () {
-    // var HOST = location.origin.replace(/^http/, 'ws');
-    this.socket = new WebSocket("ws://localhost:8080");
+    var HOST = location.origin.replace(/^http/, 'ws');
+    this.socket = new WebSocket(HOST);
 
     this.socket.onopen = function () {
         console.log("connecte3d to server...");
